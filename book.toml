@@ -1,0 +1,9 @@
+[book]
+authors = ["Barret Ren"]
+language = "zh-CN"
+multilingual = false
+src = "src"
+
+[output.html.fold]
+enable = true
+level = 0
