@@ -57,11 +57,17 @@ Cargo的package目录结构如下：
 - 示例可执行文件放在examples目录中。
 - 基准测试进入benches目录
 
-# module与路径
-在一个crate中,对代码进行分组, 增加可读性,易于复用. module还可以控制项目的私有性(public, private).
+# module与Path
+## module私有性
+在一个crate中,使用module对代码进行分组, 可以增加可读性,易于复用, 还可以可以控制项目的私有性:
+* 声明默认是private的, 需要用`pub`声明为public
+    * **`pub struct`表示struct是public的, 但里面的成员还是private, 需要单独加`pub`**
+    * `pub enum`表示enum和里面的值都是public的
+* 父模块无法访问子模块的私有item
+* 子模块可以使用所有祖先模块的item(使用`super`关键字)
 
-## 路径引用模块
-- 绝对路径（absolute path）从crate根开始，以`crate名`或者`字面值crate`开头。
+## 引用模块path
+- 绝对路径（absolute path）从crate根开始，以`crate名`或者`字面值crate`开头。**推荐使用绝对路径**.
 - 相对路径（relative path）从当前模块开始，以 self(本模块开始)、 super(父模块开始)或当前模块的标识符开头
 - 绝对路径和相对路径都后跟一个或多个由双冒号（ :: ）分割的标识符
 ```rust
@@ -78,13 +84,39 @@ self::front_of_house::hosting::add_to_waitlist();
 ```
 
 ## use导入模块
-直接使用路径太繁琐了，我们可以使用`use`导入需要的模块，简化调用，类似C++的`using`。
+直接使用路径太繁琐了，我们可以使用`use`导入需要的模块，简化调用，类似C++的`include + using`。
 ```rust
 //导入了hosting模块，可以直接调用，不需要那么长的路径了
-use crate::front_of_house::hosting;
+use crate::front_of_house::hosting; //use后面绝对路径和相对路径都可以
 hosting::add_to_waitlist();
 ```
+**其他技巧**:
+- 和C++的`using`一样，`use`也可以定义别名，格式为：`use XXX as xxx;`
+- `use`还可以把多个模块在同一行中导入，减少行数：
+    - `use std::{mod1,mod2};` 两个独立路径
+    - `use std::{self, mod2};` mod2是self的子路径
+- 使用`use`导入的item在当前作用域内是private的, 只能在本文件内使用.如果需要让其他文件也可能访问当前文件导入的item, 需要使用`pub use`
 
-## 其他技巧
-- 和C++的`using`一样，`use`也可以定义别名，格式为：`use XXX as xxx;`。
-- `use`还可以把多个模块在同一行中导入，减少行数：`use std::{mod1,mod2};`
+# 拆分module到不同文件
+类似与C++的前置声明, 我们可以在总的模块定义文件中(比如lib.rs)使用格式`mod module_name;`做前置声明, 具体的module定义放在其他文件中.
+需要注意有一下规则:
+* 存放具体module定义的文件,文件名必须是module_name
+* 如果是存放多级module, 文件也需要保存在多级目录下, 文件路径与module path一致(src为根路径)
+
+举例:
+```rust
+// src/lib.rs
+mod front_of_house; //前置声明, 具体定义在front_of_house.rs中
+
+pub use crate::front_of_house::hosting;
+
+pub fn eat_at_restaurant() {
+    hosting::add_to_waitlist();
+}
+
+// src/front_of_house.rs
+pub mod hosting; //子模块前置声明
+
+// src/front_of_house/hosting.rs
+pub fn add_to_waitlist() {} //实际的定义位置
+```
