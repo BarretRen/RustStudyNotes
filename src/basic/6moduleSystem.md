@@ -120,3 +120,12 @@ pub mod hosting; //子模块前置声明
 // src/front_of_house/hosting.rs
 pub fn add_to_waitlist() {} //实际的定义位置
 ```
+
+# crate关键字与lib和bin
+前面说到, library和binary都是独立的crate. 也就是说在library中，`crate::`代表的是lib.rs；在二进制crate中，`crate::`代表的是main.rs或bin目录下其他rs文件.
+在同一个crate中, 可以使用`crate::`开始表示模块的绝对路径. 但是不同crate之间引用path, 就不能以`crate::`开头了, 因为它表示的是自己的当前根路径.正确的做法是:
+* 对于同目录的crate, 使用整个项目的package name作为根路径, 再逐级添加后续路径
+* 对于引用lib.rs, 除了上面方法, 还可以在cargo.toml指定lib的name, 使用此name作为根路径
+* 对于子目录的crate(比如bin目录下), 需要先创建一个bin.rs, 文件内容为bin目录下name的前置声明
+
+示例参照code中mod_use
