@@ -1,3 +1,65 @@
+# 泛型<T>
+和C++模板参数大致一样, 用于标记类型占位符, 真正的具体类型在使用时指定. 泛型通常用于如下几种结构中:
+
+## 函数泛型参数
+```rust
+fn largest<T>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+    largest
+}
+
+fn main() {
+    let number_list = vec![34, 50, 25, 100, 65];
+    let result = largest(&number_list); //自动推导出T的类型
+    println!("The largest number is {}", result);
+
+    let char_list = vec!['y', 'm', 'a', 'q'];
+    let result = largest(&char_list);
+    println!("The largest char is {}", result);
+}
+```
+
+## 结构体和impl泛型
+```rust
+struct Point<T> { //单泛型参数
+    x: T,
+    y: T,
+}
+
+struct Point<X1, Y1> {//多泛型参数
+    x: X1,
+    y: Y1,
+}
+
+impl<X1, Y1> Point<X1, Y1> { //impl中也要指定泛型参数
+    //方法里的X2,Y2表示类型与X1,Y1不一定一样
+    fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+```
+
+## enum泛型
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
 
 # trait接口
 trait（类似C++纯虚函数）告诉编译器
