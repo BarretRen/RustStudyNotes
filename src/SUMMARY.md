@@ -8,3 +8,5 @@
     - [Enum与match语句](./basic/5Enum与match语句.md)
     - [moduleSystem](./basic/6moduleSystem.md)
     - [错误处理](./basic/7错误处理.md)
+    - [泛型和trait](./basic/8泛型与trait.md)
+    - [rust编写测试](./basic/9AutoTest.md)
