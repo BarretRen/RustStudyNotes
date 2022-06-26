@@ -2,7 +2,7 @@
 Rust某些类型实现了迭代器，和C++一样可以依次返回元素。迭代器都实现了一个叫做 Iterator 的定义于标准库的trait， trait定义如下：
 ```rust
 pub trait Iterator {
-    type Item; //关联类型, 实际类型在实现trait的impl中指定具体类型
+    type Item; //关联类型, 实际类型在实现trait的impl中指定具体类型, 其实就是类型别名
 
     fn next(&mut self) -> Option<Self::Item>; //用于返回每个元素
 }
