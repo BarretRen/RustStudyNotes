@@ -10,3 +10,4 @@
     - [错误处理](./basic/7错误处理.md)
     - [泛型和trait](./basic/8泛型与trait.md)
     - [rust编写测试](./basic/9AutoTest.md)
+    - [闭包](./basic/10Closure.md)
