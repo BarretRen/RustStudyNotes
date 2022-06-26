@@ -11,3 +11,5 @@
     - [泛型和trait](./basic/8泛型与trait.md)
     - [rust编写测试](./basic/9AutoTest.md)
     - [闭包](./basic/10Closure.md)
+    - [迭代器](./basic/11iterator.md)
+    - [Cargo基本使用](./basic/12CargoUsage.md)

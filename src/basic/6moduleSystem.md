@@ -129,3 +129,36 @@ pub fn add_to_waitlist() {} //实际的定义位置
 * 对于子目录的crate(比如bin目录下), 需要先创建一个bin.rs, 文件内容为bin目录下name的前置声明
 
 示例参照code中mod_use
+
+# cargo workspace
+上面都是讲的一个package内的模块引用， 那如果有多个rust package，相互之间该如何调用呢？这就需要cargo workspace了。
+cargo workspace是一个目录，包含多个rust项目的子目录和cargo.toml. cargo.toml中与之前项目的不同，**里面是关于workspace的配置，需要在里面指定包含在workspace中的rust package**：
+```toml
+[workspace]
+
+//members是rust ackage的name
+members = [
+    "adder",
+    "add_one",
+]
+```
+对应目录结构:
+```
+├── Cargo.lock
+├── Cargo.toml
+├── add_one
+│   ├── Cargo.toml
+│   └── src
+│       └── lib.rs
+├── adder
+│   ├── Cargo.toml
+│   └── src
+│       └── main.rs
+└── target
+```
+
+而在子目录package中的cargo.toml中, 如果需要引用其他package中的crate, 需要在依赖中指定path:
+```toml
+[dependencies]
+add_one = { path = "../add_one" }
+```
