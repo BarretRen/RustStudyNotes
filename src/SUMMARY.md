@@ -12,4 +12,6 @@
     - [rust编写测试](./basic/9AutoTest.md)
     - [闭包](./basic/10Closure.md)
     - [迭代器](./basic/11iterator.md)
-    - [Cargo基本使用](./basic/12CargoUsage.md)
+    - [智能指针](./basic/12SmartPointer.md)
+    - [Rust多线程](./basic/13Concurrency.md)
+    - [面向对象编程](./basic/14面向对象.md)
